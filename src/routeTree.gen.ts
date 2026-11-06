@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IncubatorsRouteImport } from './routes/incubators'
+import { Route as BatchesBatchIdRouteImport } from './routes/batches.$batchId'
+import { Route as BatchesNewRouteImport } from './routes/batches.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IncubatorsRoute = IncubatorsRouteImport.update({
+  id: '/incubators',
+  path: '/incubators',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BatchesBatchIdRoute = BatchesBatchIdRouteImport.update({
+  id: '/batches/$batchId',
+  path: '/batches/$batchId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BatchesNewRoute = BatchesNewRouteImport.update({
+  id: '/batches/new',
+  path: '/batches/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/incubators': typeof IncubatorsRoute
+  '/batches/$batchId': typeof BatchesBatchIdRoute
+  '/batches/new': typeof BatchesNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/incubators': typeof IncubatorsRoute
+  '/batches/$batchId': typeof BatchesBatchIdRoute
+  '/batches/new': typeof BatchesNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/incubators': typeof IncubatorsRoute
+  '/batches/$batchId': typeof BatchesBatchIdRoute
+  '/batches/new': typeof BatchesNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/incubators' | '/batches/$batchId' | '/batches/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/incubators' | '/batches/$batchId' | '/batches/new'
+  id: '__root__' | '/' | '/incubators' | '/batches/$batchId' | '/batches/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IncubatorsRoute: typeof IncubatorsRoute
+  BatchesBatchIdRoute: typeof BatchesBatchIdRoute
+  BatchesNewRoute: typeof BatchesNewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/incubators': {
+      id: '/incubators'
+      path: '/incubators'
+      fullPath: '/incubators'
+      preLoaderRoute: typeof IncubatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/batches/$batchId': {
+      id: '/batches/$batchId'
+      path: '/batches/$batchId'
+      fullPath: '/batches/$batchId'
+      preLoaderRoute: typeof BatchesBatchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/batches/new': {
+      id: '/batches/new'
+      path: '/batches/new'
+      fullPath: '/batches/new'
+      preLoaderRoute: typeof BatchesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IncubatorsRoute: IncubatorsRoute,
+  BatchesBatchIdRoute: BatchesBatchIdRoute,
+  BatchesNewRoute: BatchesNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
