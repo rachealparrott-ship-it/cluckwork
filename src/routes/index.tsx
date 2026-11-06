@@ -112,7 +112,7 @@ function Dashboard() {
                       <span className="font-display text-2xl text-primary">Day {day}</span>
                     </div>
                     <p className="text-muted-foreground">
-                      {eggs.length} eggs · {inc?.name ?? "Incubator"} · hatch {formatDay(milestonesFor(b.setDate)[3].date)}
+                      {eggs.length} eggs · {inc?.name ?? "Incubator"} · hatch {formatDay(milestonesFor(b.setDate).at(-1)!.date)}
                     </p>
                     <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted">
                       <div className="h-full rounded-full bg-primary" style={{ width: `${Math.min(100, (day / 21) * 100)}%` }} />
