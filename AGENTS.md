@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- All app data lives in IndexedDB via Dexie (`src/lib/db.ts`); records carry `updatedAt` + `synced` flags so a future cloud sync can push unsynced rows. Why: local-first, works offline.
+- Incubation milestone math lives only in `src/lib/schedule.ts` (dates as YYYY-MM-DD, set date = day 0). Why: one tested source for the calendar.
+- Service worker is registered only from `src/lib/pwa.ts` (vite-plugin-pwa generateSW, guarded off in dev/preview). Why: avoid stale previews.
