@@ -49,6 +49,18 @@ export interface Bird {
   synced: 0 | 1;
 }
 
+/** One status change for an egg, stamped with the incubation day it happened on. */
+export interface EggEvent {
+  id: string;
+  eggId: string;
+  batchId: string;
+  from: EggStatus;
+  to: EggStatus;
+  day: number;
+  at: number;
+  synced: 0 | 1;
+}
+
 /** Tracks which reminders were already shown so we don't repeat them. */
 export interface SentReminder {
   key: string;
@@ -60,6 +72,7 @@ class HatchDB extends Dexie {
   eggs!: EntityTable<Egg, "id">;
   birds!: EntityTable<Bird, "id">;
   reminders!: EntityTable<SentReminder, "key">;
+  eggEvents!: EntityTable<EggEvent, "id">;
   constructor() {
     super("hatch-and-flock");
     this.version(1).stores({
@@ -69,6 +82,7 @@ class HatchDB extends Dexie {
       birds: "id, breed, synced",
       reminders: "key",
     });
+    this.version(2).stores({ eggEvents: "id, eggId, batchId, synced" });
   }
 }
 
