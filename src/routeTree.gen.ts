@@ -10,13 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IncubatorsRouteImport } from './routes/incubators'
 import { Route as BatchesBatchIdRouteImport } from './routes/batches.$batchId'
 import { Route as BatchesNewRouteImport } from './routes/batches.new'
+import { Route as ApiPublicJobsSendRemindersRouteImport } from './routes/api/public/jobs/send-reminders'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IncubatorsRoute = IncubatorsRouteImport.update({
@@ -34,39 +41,72 @@ const BatchesNewRoute = BatchesNewRouteImport.update({
   path: '/batches/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicJobsSendRemindersRoute =
+  ApiPublicJobsSendRemindersRouteImport.update({
+    id: '/api/public/jobs/send-reminders',
+    path: '/api/public/jobs/send-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/incubators': typeof IncubatorsRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/incubators': typeof IncubatorsRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/incubators': typeof IncubatorsRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/incubators' | '/batches/$batchId' | '/batches/new'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/incubators'
+    | '/batches/$batchId'
+    | '/batches/new'
+    | '/api/public/jobs/send-reminders'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/incubators' | '/batches/$batchId' | '/batches/new'
-  id: '__root__' | '/' | '/incubators' | '/batches/$batchId' | '/batches/new'
+  to:
+    | '/'
+    | '/auth'
+    | '/incubators'
+    | '/batches/$batchId'
+    | '/batches/new'
+    | '/api/public/jobs/send-reminders'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/incubators'
+    | '/batches/$batchId'
+    | '/batches/new'
+    | '/api/public/jobs/send-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   IncubatorsRoute: typeof IncubatorsRoute
   BatchesBatchIdRoute: typeof BatchesBatchIdRoute
   BatchesNewRoute: typeof BatchesNewRoute
+  ApiPublicJobsSendRemindersRoute: typeof ApiPublicJobsSendRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,6 +116,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/incubators': {
@@ -99,14 +146,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BatchesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/jobs/send-reminders': {
+      id: '/api/public/jobs/send-reminders'
+      path: '/api/public/jobs/send-reminders'
+      fullPath: '/api/public/jobs/send-reminders'
+      preLoaderRoute: typeof ApiPublicJobsSendRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   IncubatorsRoute: IncubatorsRoute,
   BatchesBatchIdRoute: BatchesBatchIdRoute,
   BatchesNewRoute: BatchesNewRoute,
+  ApiPublicJobsSendRemindersRoute: ApiPublicJobsSendRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
