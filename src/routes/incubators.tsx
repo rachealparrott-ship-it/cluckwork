@@ -52,7 +52,7 @@ function Incubators() {
                 <p className="text-muted-foreground">Holds {i.capacity} eggs{inUse ? " · in use" : ""}</p>
               </div>
               {!inUse && (
-                <button aria-label={`Remove ${i.name}`} className="grid size-12 place-items-center rounded-xl text-destructive" onClick={() => db.incubators.delete(i.id)}>
+                <button aria-label={`Remove ${i.name}`} className="grid size-12 place-items-center rounded-xl text-destructive" onClick={() => db.transaction("rw", db.incubators, db.tombstones, async () => { await db.incubators.delete(i.id); await db.tombstones.put({ id: i.id, table: "incubators" }); })}>
                   <Trash2 className="size-5" />
                 </button>
               )}

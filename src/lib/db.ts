@@ -61,6 +61,12 @@ export interface EggEvent {
   synced: 0 | 1;
 }
 
+/** A local delete waiting to be sent to the cloud. */
+export interface Tombstone {
+  id: string;
+  table: "incubators" | "batches" | "eggs";
+}
+
 /** Tracks which reminders were already shown so we don't repeat them. */
 export interface SentReminder {
   key: string;
@@ -73,6 +79,7 @@ class HatchDB extends Dexie {
   birds!: EntityTable<Bird, "id">;
   reminders!: EntityTable<SentReminder, "key">;
   eggEvents!: EntityTable<EggEvent, "id">;
+  tombstones!: EntityTable<Tombstone, "id">;
   constructor() {
     super("hatch-and-flock");
     this.version(1).stores({
@@ -83,6 +90,7 @@ class HatchDB extends Dexie {
       reminders: "key",
     });
     this.version(2).stores({ eggEvents: "id, eggId, batchId, synced" });
+    this.version(3).stores({ tombstones: "id" });
   }
 }
 
