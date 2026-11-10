@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { db, type Egg, type EggStatus } from "@/lib/db";
+import { db, uid, type Egg, type EggStatus } from "@/lib/db";
 import { PageTitle, btnPrimary, btnSecondary, field } from "@/components/AppShell";
 import { formatDay, incubationDay, localToday, milestonesFor } from "@/lib/schedule";
 
@@ -106,18 +106,25 @@ function BatchPage() {
         <p className="text-center text-muted-foreground">This batch is finished.</p>
       )}
 
-      {selected && <EggSheet egg={selected} onClose={() => setSelected(null)} />}
+      {selected && <EggSheet egg={selected} day={Math.max(0, day)} onClose={() => setSelected(null)} />}
     </>
   );
 }
 
-function EggSheet({ egg, onClose }: { egg: Egg; onClose: () => void }) {
+function EggSheet({ egg, day, onClose }: { egg: Egg; day: number; onClose: () => void }) {
+  const history = useLiveQuery(() => db.eggEvents.where("eggId").equals(egg.id).sortBy("at"), [egg.id]);
   const [status, setStatus] = useState(egg.status);
   const [breed, setBreed] = useState(egg.breed);
   const [uncertain, setUncertain] = useState(egg.breedUncertain);
 
   async function save(next = status) {
-    await db.eggs.update(egg.id, { status: next, breed: breed.trim(), breedUncertain: uncertain, updatedAt: Date.now(), synced: 0 });
+    const now = Date.now();
+    await db.transaction("rw", db.eggs, db.eggEvents, async () => {
+      await db.eggs.update(egg.id, { status: next, breed: breed.trim(), breedUncertain: uncertain, updatedAt: now, synced: 0 });
+      if (next !== egg.status) {
+        await db.eggEvents.add({ id: uid(), eggId: egg.id, batchId: egg.batchId, from: egg.status, to: next, day, at: now, synced: 0 });
+      }
+    });
     onClose();
   }
 
@@ -152,6 +159,22 @@ function EggSheet({ egg, onClose }: { egg: Egg; onClose: () => void }) {
             </label>
           </div>
         )}
+        <div className="mb-4">
+          <p className="mb-2 font-semibold">History</p>
+          {history && history.length > 0 ? (
+            <ol className="space-y-1">
+              {history.map((h) => (
+                <li key={h.id} className="flex items-center gap-3">
+                  <span className="w-16 shrink-0 font-bold text-primary">Day {h.day}</span>
+                  <span className={`egg-shape inline-block h-4 w-3 ${styleOf(h.to).cls}`} />
+                  <span>{styleOf(h.to).label}</span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="text-muted-foreground">No checks recorded yet.</p>
+          )}
+        </div>
         <button className={`${btnPrimary} w-full`} onClick={() => save()}>Save</button>
       </div>
     </div>
