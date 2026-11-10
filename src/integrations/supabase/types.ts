@@ -14,7 +14,192 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      batches: {
+        Row: {
+          created_at: number
+          deleted: boolean
+          id: string
+          incubator_id: string
+          name: string
+          set_date: string
+          status: string
+          updated_at: number
+          user_id: string
+        }
+        Insert: {
+          created_at: number
+          deleted?: boolean
+          id: string
+          incubator_id: string
+          name: string
+          set_date: string
+          status?: string
+          updated_at: number
+          user_id?: string
+        }
+        Update: {
+          created_at?: number
+          deleted?: boolean
+          id?: string
+          incubator_id?: string
+          name?: string
+          set_date?: string
+          status?: string
+          updated_at?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      egg_events: {
+        Row: {
+          at: number
+          batch_id: string
+          day: number
+          deleted: boolean
+          egg_id: string
+          from_status: string
+          id: string
+          to_status: string
+          updated_at: number
+          user_id: string
+        }
+        Insert: {
+          at: number
+          batch_id: string
+          day: number
+          deleted?: boolean
+          egg_id: string
+          from_status: string
+          id: string
+          to_status: string
+          updated_at: number
+          user_id?: string
+        }
+        Update: {
+          at?: number
+          batch_id?: string
+          day?: number
+          deleted?: boolean
+          egg_id?: string
+          from_status?: string
+          id?: string
+          to_status?: string
+          updated_at?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      eggs: {
+        Row: {
+          batch_id: string
+          breed: string
+          breed_uncertain: boolean
+          deleted: boolean
+          id: string
+          label: string
+          position: number
+          source: string
+          status: string
+          updated_at: number
+          user_id: string
+        }
+        Insert: {
+          batch_id: string
+          breed?: string
+          breed_uncertain?: boolean
+          deleted?: boolean
+          id: string
+          label?: string
+          position?: number
+          source?: string
+          status?: string
+          updated_at: number
+          user_id?: string
+        }
+        Update: {
+          batch_id?: string
+          breed?: string
+          breed_uncertain?: boolean
+          deleted?: boolean
+          id?: string
+          label?: string
+          position?: number
+          source?: string
+          status?: string
+          updated_at?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      incubators: {
+        Row: {
+          capacity: number
+          created_at: number
+          deleted: boolean
+          id: string
+          name: string
+          updated_at: number
+          user_id: string
+        }
+        Insert: {
+          capacity?: number
+          created_at: number
+          deleted?: boolean
+          id: string
+          name: string
+          updated_at: number
+          user_id?: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: number
+          deleted?: boolean
+          id?: string
+          name?: string
+          updated_at?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      push_tokens: {
+        Row: {
+          created_at: string
+          timezone: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          timezone?: string
+          token: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          timezone?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      sent_push_reminders: {
+        Row: {
+          batch_id: string
+          kind: string
+          sent_at: string
+        }
+        Insert: {
+          batch_id: string
+          kind: string
+          sent_at?: string
+        }
+        Update: {
+          batch_id?: string
+          kind?: string
+          sent_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
