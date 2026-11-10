@@ -15,6 +15,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/AppShell";
 import { setupServiceWorker } from "@/lib/pwa";
 import { checkReminders } from "@/lib/reminders";
+import { syncNow } from "@/lib/sync";
+import { listenForegroundPush } from "@/lib/push";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -115,12 +118,28 @@ function RootComponent() {
   useEffect(() => {
     void setupServiceWorker();
     void checkReminders();
-    const t = window.setInterval(() => void checkReminders(), 15 * 60 * 1000);
-    const onVis = () => document.visibilityState === "visible" && void checkReminders();
+    void syncNow();
+    void listenForegroundPush();
+    const t = window.setInterval(() => {
+      void checkReminders();
+      void syncNow();
+    }, 5 * 60 * 1000);
+    const onVis = () => {
+      if (document.visibilityState !== "visible") return;
+      void checkReminders();
+      void syncNow();
+    };
+    const onOnline = () => void syncNow();
     document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("online", onOnline);
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") void syncNow();
+    });
     return () => {
       window.clearInterval(t);
       document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("online", onOnline);
+      data.subscription.unsubscribe();
     };
   }, []);
 
