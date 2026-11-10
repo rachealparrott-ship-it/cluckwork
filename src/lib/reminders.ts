@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { localToday, milestonesFor } from "./schedule";
+import { pushEnabledHere } from "./push";
 
 export function notificationsSupported() {
   return typeof window !== "undefined" && "Notification" in window;
@@ -13,6 +14,8 @@ export async function requestNotifications(): Promise<NotificationPermission | "
 /** Show a notification for each of today's milestones that hasn't been shown yet. */
 export async function checkReminders() {
   if (!notificationsSupported() || Notification.permission !== "granted") return;
+  // Cloud reminders cover this device; avoid double alerts.
+  if (pushEnabledHere()) return;
   const today = localToday();
   const batches = await db.batches.where("status").equals("active").toArray();
   for (const b of batches) {
