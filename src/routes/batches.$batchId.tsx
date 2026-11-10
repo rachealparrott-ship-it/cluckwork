@@ -130,7 +130,7 @@ function EggSheet({ egg, day, onClose }: { egg: Egg; day: number; onClose: () =>
 
   return (
     <div className="fixed inset-0 z-30 flex items-end bg-foreground/40" onClick={onClose}>
-      <div className="mx-auto w-full max-w-lg rounded-t-3xl bg-card p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
+      <div className="mx-auto max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-card p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
         <div className="mb-4 flex items-start justify-between">
           <div>
             <h2 className="text-2xl font-semibold">Egg {egg.label}</h2>
