@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Home, PlusCircle, UserRound, Warehouse } from "lucide-react";
+import { BookOpen, Home, PlusCircle, UserRound, Warehouse } from "lucide-react";
 import type { ReactNode } from "react";
 
 const tabs = [
   { to: "/", label: "Today", icon: Home },
   { to: "/batches/new", label: "New batch", icon: PlusCircle },
   { to: "/incubators", label: "Incubators", icon: Warehouse },
+  { to: "/guides", label: "Guides", icon: BookOpen },
   { to: "/auth", label: "Account", icon: UserRound },
 ] as const;
 
@@ -14,12 +15,12 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="mx-auto flex min-h-screen max-w-lg flex-col">
       <main className="flex-1 px-4 pb-28 pt-6">{children}</main>
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t bg-card/95 backdrop-blur">
-        <div className="mx-auto grid max-w-lg grid-cols-4 pb-[env(safe-area-inset-bottom)]">
+        <div className="mx-auto grid max-w-lg grid-cols-5 pb-[env(safe-area-inset-bottom)]">
           {tabs.map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
               to={to}
-              activeOptions={{ exact: true }}
+              activeOptions={{ exact: to === "/" }}
               className="flex min-h-16 flex-col items-center justify-center gap-1 text-sm font-semibold text-muted-foreground data-[status=active]:text-primary"
             >
               <Icon className="size-6" />

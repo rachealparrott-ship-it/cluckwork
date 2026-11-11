@@ -152,6 +152,9 @@ function EggSheet({ egg, day, onClose }: { egg: Egg; day: number; onClose: () =>
         {(status === "hatched" || egg.status === "hatched") && (
           <div className="mb-4 space-y-3">
             <p className="font-semibold">Confirm breed now the chick's out</p>
+            <Link to="/guides/$slug" params={{ slug: "sexing-chicks" }} className="inline-flex min-h-11 items-center font-semibold text-primary underline">
+              Cockerel or pullet? What to look for
+            </Link>
             <input className={field} value={breed} onChange={(e) => setBreed(e.target.value)} placeholder="Breed" />
             <label className="flex min-h-12 items-center gap-3 text-lg">
               <input type="checkbox" className="size-6 accent-primary" checked={uncertain} onChange={(e) => setUncertain(e.target.checked)} />
