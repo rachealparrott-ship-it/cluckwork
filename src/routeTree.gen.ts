@@ -14,6 +14,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IncubatorsRouteImport } from './routes/incubators'
 import { Route as BatchesBatchIdRouteImport } from './routes/batches.$batchId'
 import { Route as BatchesNewRouteImport } from './routes/batches.new'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as ApiPublicJobsSendRemindersRouteImport } from './routes/api/public/jobs/send-reminders'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +43,16 @@ const BatchesNewRoute = BatchesNewRouteImport.update({
   path: '/batches/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicJobsSendRemindersRoute =
   ApiPublicJobsSendRemindersRouteImport.update({
     id: '/api/public/jobs/send-reminders',
@@ -54,6 +66,8 @@ export interface FileRoutesByFullPath {
   '/incubators': typeof IncubatorsRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/guides/$slug': typeof GuidesSlugRoute
+  '/guides/': typeof GuidesIndexRoute
   '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
 export interface FileRoutesByTo {
@@ -62,6 +76,8 @@ export interface FileRoutesByTo {
   '/incubators': typeof IncubatorsRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/guides/$slug': typeof GuidesSlugRoute
+  '/guides': typeof GuidesIndexRoute
   '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
 export interface FileRoutesById {
@@ -71,6 +87,8 @@ export interface FileRoutesById {
   '/incubators': typeof IncubatorsRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/guides/$slug': typeof GuidesSlugRoute
+  '/guides/': typeof GuidesIndexRoute
   '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
 export interface FileRouteTypes {
@@ -81,6 +99,8 @@ export interface FileRouteTypes {
     | '/incubators'
     | '/batches/$batchId'
     | '/batches/new'
+    | '/guides/$slug'
+    | '/guides/'
     | '/api/public/jobs/send-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -89,6 +109,8 @@ export interface FileRouteTypes {
     | '/incubators'
     | '/batches/$batchId'
     | '/batches/new'
+    | '/guides/$slug'
+    | '/guides'
     | '/api/public/jobs/send-reminders'
   id:
     | '__root__'
@@ -97,6 +119,8 @@ export interface FileRouteTypes {
     | '/incubators'
     | '/batches/$batchId'
     | '/batches/new'
+    | '/guides/$slug'
+    | '/guides/'
     | '/api/public/jobs/send-reminders'
   fileRoutesById: FileRoutesById
 }
@@ -106,6 +130,8 @@ export interface RootRouteChildren {
   IncubatorsRoute: typeof IncubatorsRoute
   BatchesBatchIdRoute: typeof BatchesBatchIdRoute
   BatchesNewRoute: typeof BatchesNewRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
   ApiPublicJobsSendRemindersRoute: typeof ApiPublicJobsSendRemindersRoute
 }
 
@@ -146,6 +172,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BatchesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/jobs/send-reminders': {
       id: '/api/public/jobs/send-reminders'
       path: '/api/public/jobs/send-reminders'
@@ -162,6 +202,8 @@ const rootRouteChildren: RootRouteChildren = {
   IncubatorsRoute: IncubatorsRoute,
   BatchesBatchIdRoute: BatchesBatchIdRoute,
   BatchesNewRoute: BatchesNewRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
   ApiPublicJobsSendRemindersRoute: ApiPublicJobsSendRemindersRoute,
 }
 export const routeTree = rootRouteImport
