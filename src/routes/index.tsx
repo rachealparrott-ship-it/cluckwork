@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/db";
 import { PageTitle, btnPrimary, btnSecondary } from "@/components/AppShell";
 import { formatDay, incubationDay, localToday, milestonesFor } from "@/lib/schedule";
-import { checkReminders, notificationsSupported, requestNotifications } from "@/lib/reminders";
+import { pushEnabledHere } from "@/lib/push";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,10 +23,10 @@ type Task = { batchId: string; batchName: string; text: string; kind: string };
 
 function Dashboard() {
   const [today, setToday] = useState<string | null>(null);
-  const [perm, setPerm] = useState<string>("default");
+  const [pushOn, setPushOn] = useState(true);
   useEffect(() => {
     setToday(localToday());
-    setPerm(notificationsSupported() ? Notification.permission : "unsupported");
+    setPushOn(pushEnabledHere());
   }, []);
 
   const data = useLiveQuery(async () => {
@@ -52,17 +52,10 @@ function Dashboard() {
     <>
       <PageTitle sub={formatDay(today)}>Good day, keeper</PageTitle>
 
-      {perm === "default" && (
-        <button
-          className={`${btnSecondary} mb-5 w-full`}
-          onClick={async () => {
-            const r = await requestNotifications();
-            setPerm(r);
-            void checkReminders();
-          }}
-        >
-          <Bell className="size-5" /> Turn on reminders
-        </button>
+      {!pushOn && (
+        <Link to="/auth" className={`${btnSecondary} mb-5 w-full`}>
+          <Bell className="size-5" /> Get reminders on your phone
+        </Link>
       )}
 
       <section className="mb-7">
