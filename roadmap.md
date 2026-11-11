@@ -6,6 +6,5 @@
 - [ ] 5 Hatch results
 - [ ] 6 Flock register
 - [ ] 7 Daily egg log
-- [ ] Cloud sync (later)
 - [x] Egg status history per candling
-- [ ] Online sync + reminders when app is closed (needs sign-in + push setup decisions)
+- [x] Online sync + reminders when app is closed

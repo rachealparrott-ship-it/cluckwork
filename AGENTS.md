@@ -32,3 +32,5 @@ use the editor.
 - All app data lives in IndexedDB via Dexie (`src/lib/db.ts`); records carry `updatedAt` + `synced` flags so a future cloud sync can push unsynced rows. Why: local-first, works offline.
 - Incubation milestone math lives only in `src/lib/schedule.ts` (dates as YYYY-MM-DD, set date = day 0). Why: one tested source for the calendar.
 - Service worker is registered only from `src/lib/pwa.ts` (vite-plugin-pwa generateSW, guarded off in dev/preview). Why: avoid stale previews.
+- Cloud sync (`src/lib/sync.ts`) mirrors Dexie tables to Cloud tables owned per user (RLS by user_id): push unsynced rows, then pull all; local deletes go via `tombstones` and soft `deleted` flags. Why: local-first stays the source of truth offline.
+- Closed-app reminders: device tokens in `push_tokens`, sent daily by the scheduled `/api/public/jobs/send-reminders` route via Firebase Messaging, deduped in `sent_push_reminders`; local notifications are skipped on devices with push on. Why: no double alerts.
