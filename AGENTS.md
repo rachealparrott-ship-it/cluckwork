@@ -34,3 +34,4 @@ use the editor.
 - Service worker is registered only from `src/lib/pwa.ts` (vite-plugin-pwa generateSW, guarded off in dev/preview). Why: avoid stale previews.
 - Cloud sync (`src/lib/sync.ts`) mirrors Dexie tables to Cloud tables owned per user (RLS by user_id): push unsynced rows, then pull all; local deletes go via `tombstones` and soft `deleted` flags. Why: local-first stays the source of truth offline.
 - Closed-app reminders: device tokens in `push_tokens`, sent daily by the scheduled `/api/public/jobs/send-reminders` route via Firebase Messaging, deduped in `sent_push_reminders`; local notifications are skipped on devices with push on. Why: no double alerts.
+- Guides are static typed content in `src/content/guides/` (one file per guide, registered in `index.ts`), rendered by `/guides` and `/guides/$slug`; every guide lists its sources. Why: easy to add guides without a database and they work offline.
