@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, Sparkles } from "lucide-react";
 import { PageTitle } from "@/components/AppShell";
 import { getGuide, type Reliability } from "@/content/guides";
 
@@ -43,6 +43,11 @@ function GuidePage() {
         <ArrowLeft className="size-5" /> Guides
       </Link>
       <PageTitle sub={guide.summary}>{guide.title}</PageTitle>
+      {guide.slug === "sexing-chicks" && (
+        <Link to="/sexing-helper" className="card-soft mb-5 flex min-h-14 items-center gap-3 p-4 font-semibold text-primary">
+          <Sparkles className="size-6 shrink-0" /> Get signs for your chick's breed and age
+        </Link>
+      )}
 
       <nav aria-label="On this page" className="mb-6 flex flex-wrap gap-2">
         {guide.sections.map((s) => (
