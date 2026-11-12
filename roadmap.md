@@ -9,3 +9,4 @@
 - [x] Egg status history per candling
 - [x] Online sync + reminders when app is closed
 - [x] Guides section (first guide: sexing chicks)
+- [x] AI cockerel/pullet helper (breed + age)
