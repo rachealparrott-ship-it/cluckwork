@@ -8,3 +8,4 @@
 - [ ] 7 Daily egg log
 - [x] Egg status history per candling
 - [x] Online sync + reminders when app is closed
+- [x] Guides section (first guide: sexing chicks)
