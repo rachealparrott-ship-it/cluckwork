@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IncubatorsRouteImport } from './routes/incubators'
+import { Route as SexingHelperRouteImport } from './routes/sexing-helper'
 import { Route as BatchesBatchIdRouteImport } from './routes/batches.$batchId'
 import { Route as BatchesNewRouteImport } from './routes/batches.new'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
@@ -31,6 +32,11 @@ const AuthRoute = AuthRouteImport.update({
 const IncubatorsRoute = IncubatorsRouteImport.update({
   id: '/incubators',
   path: '/incubators',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SexingHelperRoute = SexingHelperRouteImport.update({
+  id: '/sexing-helper',
+  path: '/sexing-helper',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BatchesBatchIdRoute = BatchesBatchIdRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/incubators': typeof IncubatorsRoute
+  '/sexing-helper': typeof SexingHelperRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/incubators': typeof IncubatorsRoute
+  '/sexing-helper': typeof SexingHelperRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/incubators': typeof IncubatorsRoute
+  '/sexing-helper': typeof SexingHelperRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
   '/guides/$slug': typeof GuidesSlugRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/incubators'
+    | '/sexing-helper'
     | '/batches/$batchId'
     | '/batches/new'
     | '/guides/$slug'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/incubators'
+    | '/sexing-helper'
     | '/batches/$batchId'
     | '/batches/new'
     | '/guides/$slug'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/incubators'
+    | '/sexing-helper'
     | '/batches/$batchId'
     | '/batches/new'
     | '/guides/$slug'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   IncubatorsRoute: typeof IncubatorsRoute
+  SexingHelperRoute: typeof SexingHelperRoute
   BatchesBatchIdRoute: typeof BatchesBatchIdRoute
   BatchesNewRoute: typeof BatchesNewRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
@@ -156,6 +169,13 @@ declare module '@tanstack/react-router' {
       path: '/incubators'
       fullPath: '/incubators'
       preLoaderRoute: typeof IncubatorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sexing-helper': {
+      id: '/sexing-helper'
+      path: '/sexing-helper'
+      fullPath: '/sexing-helper'
+      preLoaderRoute: typeof SexingHelperRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/batches/$batchId': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   IncubatorsRoute: IncubatorsRoute,
+  SexingHelperRoute: SexingHelperRoute,
   BatchesBatchIdRoute: BatchesBatchIdRoute,
   BatchesNewRoute: BatchesNewRoute,
   GuidesSlugRoute: GuidesSlugRoute,
