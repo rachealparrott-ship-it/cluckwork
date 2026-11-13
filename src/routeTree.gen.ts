@@ -15,6 +15,9 @@ import { Route as IncubatorsRouteImport } from './routes/incubators'
 import { Route as SexingHelperRouteImport } from './routes/sexing-helper'
 import { Route as BatchesBatchIdRouteImport } from './routes/batches.$batchId'
 import { Route as BatchesNewRouteImport } from './routes/batches.new'
+import { Route as FlockIndexRouteImport } from './routes/flock.index'
+import { Route as FlockBirdIdRouteImport } from './routes/flock.$birdId'
+import { Route as FlockNewRouteImport } from './routes/flock.new'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as ApiPublicJobsSendRemindersRouteImport } from './routes/api/public/jobs/send-reminders'
@@ -49,6 +52,21 @@ const BatchesNewRoute = BatchesNewRouteImport.update({
   path: '/batches/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FlockIndexRoute = FlockIndexRouteImport.update({
+  id: '/flock/',
+  path: '/flock/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlockBirdIdRoute = FlockBirdIdRouteImport.update({
+  id: '/flock/$birdId',
+  path: '/flock/$birdId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlockNewRoute = FlockNewRouteImport.update({
+  id: '/flock/new',
+  path: '/flock/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/guides/',
   path: '/guides/',
@@ -73,7 +91,10 @@ export interface FileRoutesByFullPath {
   '/sexing-helper': typeof SexingHelperRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/flock/$birdId': typeof FlockBirdIdRoute
+  '/flock/new': typeof FlockNewRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/flock/': typeof FlockIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
@@ -84,7 +105,10 @@ export interface FileRoutesByTo {
   '/sexing-helper': typeof SexingHelperRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/flock/$birdId': typeof FlockBirdIdRoute
+  '/flock/new': typeof FlockNewRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/flock': typeof FlockIndexRoute
   '/guides': typeof GuidesIndexRoute
   '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
@@ -96,7 +120,10 @@ export interface FileRoutesById {
   '/sexing-helper': typeof SexingHelperRoute
   '/batches/$batchId': typeof BatchesBatchIdRoute
   '/batches/new': typeof BatchesNewRoute
+  '/flock/$birdId': typeof FlockBirdIdRoute
+  '/flock/new': typeof FlockNewRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/flock/': typeof FlockIndexRoute
   '/guides/': typeof GuidesIndexRoute
   '/api/public/jobs/send-reminders': typeof ApiPublicJobsSendRemindersRoute
 }
@@ -109,7 +136,10 @@ export interface FileRouteTypes {
     | '/sexing-helper'
     | '/batches/$batchId'
     | '/batches/new'
+    | '/flock/$birdId'
+    | '/flock/new'
     | '/guides/$slug'
+    | '/flock/'
     | '/guides/'
     | '/api/public/jobs/send-reminders'
   fileRoutesByTo: FileRoutesByTo
@@ -120,7 +150,10 @@ export interface FileRouteTypes {
     | '/sexing-helper'
     | '/batches/$batchId'
     | '/batches/new'
+    | '/flock/$birdId'
+    | '/flock/new'
     | '/guides/$slug'
+    | '/flock'
     | '/guides'
     | '/api/public/jobs/send-reminders'
   id:
@@ -131,7 +164,10 @@ export interface FileRouteTypes {
     | '/sexing-helper'
     | '/batches/$batchId'
     | '/batches/new'
+    | '/flock/$birdId'
+    | '/flock/new'
     | '/guides/$slug'
+    | '/flock/'
     | '/guides/'
     | '/api/public/jobs/send-reminders'
   fileRoutesById: FileRoutesById
@@ -143,7 +179,10 @@ export interface RootRouteChildren {
   SexingHelperRoute: typeof SexingHelperRoute
   BatchesBatchIdRoute: typeof BatchesBatchIdRoute
   BatchesNewRoute: typeof BatchesNewRoute
+  FlockBirdIdRoute: typeof FlockBirdIdRoute
+  FlockNewRoute: typeof FlockNewRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
+  FlockIndexRoute: typeof FlockIndexRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
   ApiPublicJobsSendRemindersRoute: typeof ApiPublicJobsSendRemindersRoute
 }
@@ -192,6 +231,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BatchesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/flock/': {
+      id: '/flock/'
+      path: '/flock'
+      fullPath: '/flock/'
+      preLoaderRoute: typeof FlockIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flock/$birdId': {
+      id: '/flock/$birdId'
+      path: '/flock/$birdId'
+      fullPath: '/flock/$birdId'
+      preLoaderRoute: typeof FlockBirdIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flock/new': {
+      id: '/flock/new'
+      path: '/flock/new'
+      fullPath: '/flock/new'
+      preLoaderRoute: typeof FlockNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/': {
       id: '/guides/'
       path: '/guides'
@@ -223,7 +283,10 @@ const rootRouteChildren: RootRouteChildren = {
   SexingHelperRoute: SexingHelperRoute,
   BatchesBatchIdRoute: BatchesBatchIdRoute,
   BatchesNewRoute: BatchesNewRoute,
+  FlockBirdIdRoute: FlockBirdIdRoute,
+  FlockNewRoute: FlockNewRoute,
   GuidesSlugRoute: GuidesSlugRoute,
+  FlockIndexRoute: FlockIndexRoute,
   GuidesIndexRoute: GuidesIndexRoute,
   ApiPublicJobsSendRemindersRoute: ApiPublicJobsSendRemindersRoute,
 }
