@@ -1,4 +1,6 @@
 import Dexie, { type EntityTable } from "dexie";
+import { birdFromHatchedEgg } from "./flock";
+import { addDays, toLocalIso } from "./schedule";
 
 export type EggStatus = "unknown" | "developing" | "clear" | "quit" | "hatched";
 
@@ -102,8 +104,6 @@ class HatchDB extends Dexie {
     this.version(4)
       .stores({ birds: "id, breed, synced, fromEggId" })
       .upgrade(async (tx) => {
-        const { birdFromHatchedEgg } = await import("./flock");
-        const { addDays, toLocalIso } = await import("./schedule");
         const eggs = (await tx.table("eggs").where("status").equals("hatched").toArray()) as Egg[];
         const now = Date.now();
         for (const egg of eggs) {
