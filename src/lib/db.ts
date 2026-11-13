@@ -42,18 +42,18 @@ export interface Bird {
   id: string;
   name: string;
   breed: string;
-  breedUncertain?: boolean;
-  hatchDate?: string; // YYYY-MM-DD
-  sire?: string;
-  dam?: string;
-  photo?: Blob;
+  breedUncertain?: boolean | undefined;
+  hatchDate?: string | undefined; // YYYY-MM-DD
+  sire?: string | undefined;
+  dam?: string | undefined;
+  photo?: Blob | undefined;
   /** When the photo last changed; undefined = no photo. */
-  photoAt?: number;
+  photoAt?: number | undefined;
   /** 0 = photo change not yet uploaded. */
-  photoSynced?: 0 | 1;
-  notes?: string;
-  fromEggId?: string;
-  createdAt?: number;
+  photoSynced?: 0 | 1 | undefined;
+  notes?: string | undefined;
+  fromEggId?: string | undefined;
+  createdAt?: number | undefined;
   updatedAt: number;
   synced: 0 | 1;
 }

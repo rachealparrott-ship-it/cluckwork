@@ -82,7 +82,10 @@ function NewBatch() {
       <PageTitle>New batch</PageTitle>
       <div className="card-soft mb-5 space-y-4 p-4">
         <label className="block">
-          <span className="mb-1 block font-semibold">Incubator</span>
+          <span className="mb-1 flex items-baseline justify-between font-semibold">
+            Incubator
+            <Link to="/incubators" className="text-base text-primary underline">Manage incubators</Link>
+          </span>
           <select className={field} value={incubatorId} onChange={(e) => setIncubatorId(e.target.value)}>
             {incubators?.map((i) => (
               <option key={i.id} value={i.id}>{i.name} ({i.capacity} eggs)</option>
