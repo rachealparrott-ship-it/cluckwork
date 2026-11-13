@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Home, PlusCircle, UserRound, Warehouse } from "lucide-react";
+import { Bird, BookOpen, Home, PlusCircle, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
 
 const tabs = [
   { to: "/", label: "Today", icon: Home },
   { to: "/batches/new", label: "New batch", icon: PlusCircle },
-  { to: "/incubators", label: "Incubators", icon: Warehouse },
+  { to: "/flock", label: "Flock", icon: Bird },
   { to: "/guides", label: "Guides", icon: BookOpen },
   { to: "/auth", label: "Account", icon: UserRound },
 ] as const;
