@@ -8,6 +8,13 @@
       "when": 1794352026841,
       "tag": "0000_sync_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794561017431,
+      "tag": "0001_create_birds",
+      "breakpoints": true
     }
   ]
 }
