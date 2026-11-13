@@ -50,6 +50,57 @@ export type Database = {
         }
         Relationships: []
       }
+      birds: {
+        Row: {
+          breed: string
+          breed_uncertain: boolean
+          created_at: number
+          dam: string
+          deleted: boolean
+          from_egg_id: string | null
+          hatch_date: string | null
+          id: string
+          name: string
+          notes: string
+          photo_at: number | null
+          sire: string
+          updated_at: number
+          user_id: string
+        }
+        Insert: {
+          breed?: string
+          breed_uncertain?: boolean
+          created_at: number
+          dam?: string
+          deleted?: boolean
+          from_egg_id?: string | null
+          hatch_date?: string | null
+          id: string
+          name?: string
+          notes?: string
+          photo_at?: number | null
+          sire?: string
+          updated_at: number
+          user_id?: string
+        }
+        Update: {
+          breed?: string
+          breed_uncertain?: boolean
+          created_at?: number
+          dam?: string
+          deleted?: boolean
+          from_egg_id?: string | null
+          hatch_date?: string | null
+          id?: string
+          name?: string
+          notes?: string
+          photo_at?: number | null
+          sire?: string
+          updated_at?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       egg_events: {
         Row: {
           at: number

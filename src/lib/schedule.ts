@@ -39,7 +39,11 @@ export function milestonesFor(setDate: string): Milestone[] {
 }
 
 export function localToday(): string {
-  const n = new Date();
+  return toLocalIso(new Date());
+}
+
+/** A moment as the device's local calendar date (YYYY-MM-DD). */
+export function toLocalIso(n: Date): string {
   return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, "0")}-${String(n.getDate()).padStart(2, "0")}`;
 }
 
