@@ -134,7 +134,7 @@ async function pull() {
   for (const r of birds) {
     const l = await db.birds.get(r.id);
     if (!keep(l, r.updated_at)) continue;
-    if (l && l.updatedAt === r.updated_at && l.synced === 1) continue;
+    if (l && l.synced === 1 && !r.deleted && l.updatedAt === r.updated_at && l.photoAt === (r.photo_at ?? undefined)) continue;
     if (r.deleted) {
       await db.birds.delete(r.id);
       continue;
