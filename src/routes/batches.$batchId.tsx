@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Check, X } from "lucide-react";
+import { Bird as BirdIcon, Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { db, uid, type Egg, type EggStatus } from "@/lib/db";
 import { PageTitle, btnPrimary, btnSecondary, field } from "@/components/AppShell";
 import { formatDay, incubationDay, localToday, milestonesFor } from "@/lib/schedule";
+import { flockActionForEgg } from "@/lib/flock";
 
 export const Route = createFileRoute("/batches/$batchId")({
   head: () => ({
@@ -113,16 +114,28 @@ function BatchPage() {
 
 function EggSheet({ egg, day, onClose }: { egg: Egg; day: number; onClose: () => void }) {
   const history = useLiveQuery(() => db.eggEvents.where("eggId").equals(egg.id).sortBy("at"), [egg.id]);
+  const bird = useLiveQuery(() => db.birds.where("fromEggId").equals(egg.id).first(), [egg.id]);
   const [status, setStatus] = useState(egg.status);
   const [breed, setBreed] = useState(egg.breed);
   const [uncertain, setUncertain] = useState(egg.breedUncertain);
 
   async function save(next = status) {
     const now = Date.now();
-    await db.transaction("rw", db.eggs, db.eggEvents, async () => {
-      await db.eggs.update(egg.id, { status: next, breed: breed.trim(), breedUncertain: uncertain, updatedAt: now, synced: 0 });
+    const today = localToday();
+    await db.transaction("rw", [db.eggs, db.eggEvents, db.birds, db.tombstones], async () => {
+      const updated: Egg = { ...egg, status: next, breed: breed.trim(), breedUncertain: uncertain, updatedAt: now, synced: 0 };
+      await db.eggs.put(updated);
       if (next !== egg.status) {
         await db.eggEvents.add({ id: uid(), eggId: egg.id, batchId: egg.batchId, from: egg.status, to: next, day, at: now, synced: 0 });
+      }
+      // Keep the flock register in step: a hatched chick gets its own bird profile.
+      const existing = await db.birds.where("fromEggId").equals(egg.id).first();
+      const action = flockActionForEgg(updated, egg.status, existing, today, now);
+      if (action.kind === "create") await db.birds.put(action.bird);
+      else if (action.kind === "update" && existing) await db.birds.update(existing.id, action.changes);
+      else if (action.kind === "remove" && existing) {
+        await db.birds.delete(existing.id);
+        await db.tombstones.put({ id: existing.id, table: "birds" });
       }
     });
     onClose();
@@ -152,6 +165,13 @@ function EggSheet({ egg, day, onClose }: { egg: Egg; day: number; onClose: () =>
         {(status === "hatched" || egg.status === "hatched") && (
           <div className="mb-4 space-y-3">
             <p className="font-semibold">Confirm breed now the chick's out</p>
+            {bird ? (
+              <Link to="/flock/$birdId" params={{ birdId: bird.id }} className={`${btnSecondary} w-full`}>
+                <BirdIcon className="size-5" /> Open {bird.name}'s profile
+              </Link>
+            ) : (
+              egg.status !== "hatched" && <p className="text-muted-foreground">Saving adds this chick to your flock.</p>
+            )}
             <Link to="/guides/$slug" params={{ slug: "sexing-chicks" }} className="inline-flex min-h-11 items-center font-semibold text-primary underline">
               Cockerel or pullet? What to look for
             </Link>
