@@ -4,7 +4,7 @@
 - [x] 3 Auto-calendar + reminders (shown when app is opened/running)
 - [x] 4 Egg grid
 - [ ] 5 Hatch results
-- [ ] 6 Flock register
+- [x] 6 Flock register
 - [ ] 7 Daily egg log
 - [x] Egg status history per candling
 - [x] Online sync + reminders when app is closed
