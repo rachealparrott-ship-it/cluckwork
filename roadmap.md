@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Batch Today guidance, offline candling/hatch guides, and candling reminders on days 7, 14 and 18
 - [x] 1 Home dashboard
 - [x] 2 New batch + incubators
 - [x] 3 Auto-calendar + reminders (shown when app is opened/running)
