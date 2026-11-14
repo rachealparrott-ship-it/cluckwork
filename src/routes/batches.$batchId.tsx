@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Bird as BirdIcon, Check, X } from "lucide-react";
+import { Bird as BirdIcon, BookOpen, Check, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { db, uid, type Egg, type EggStatus } from "@/lib/db";
 import { PageTitle, btnPrimary, btnSecondary, field } from "@/components/AppShell";
-import { formatDay, incubationDay, localToday, milestonesFor } from "@/lib/schedule";
+import { formatDay, guidanceForDay, incubationDay, localToday, milestonesFor } from "@/lib/schedule";
 import { flockActionForEgg } from "@/lib/flock";
 
 export const Route = createFileRoute("/batches/$batchId")({
@@ -14,6 +14,8 @@ export const Route = createFileRoute("/batches/$batchId")({
       { name: "description", content: "Candling calendar and egg-by-egg progress for this batch." },
       { property: "og:title", content: "Batch · Hatch & Flock" },
       { property: "og:description", content: "Candling calendar and egg-by-egg progress for this batch." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: BatchPage,
@@ -26,13 +28,22 @@ const STATUSES: { s: EggStatus; label: string; cls: string }[] = [
   { s: "quit", label: "Quit", cls: "bg-egg-quit text-primary-foreground" },
   { s: "hatched", label: "Hatched", cls: "bg-egg-hatched" },
 ];
-const styleOf = (s: EggStatus) => STATUSES.find((x) => x.s === s)!;
+const styleOf = (s: EggStatus) => STATUSES.find((x) => x.s === s) ?? { label: "Not checked", cls: "bg-egg-unknown" };
 
 function BatchPage() {
   const { batchId } = Route.useParams();
   const [today, setToday] = useState<string | null>(null);
   const [selected, setSelected] = useState<Egg | null>(null);
-  useEffect(() => setToday(localToday()), []);
+  useEffect(() => {
+    const refresh = () => setToday(localToday());
+    refresh();
+    const timer = window.setInterval(refresh, 60_000);
+    window.addEventListener("focus", refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+    };
+  }, []);
 
   const data = useLiveQuery(async () => {
     const batch = await db.batches.get(batchId);
@@ -47,11 +58,35 @@ function BatchPage() {
 
   const { batch, eggs = [], incubator } = data;
   const day = incubationDay(batch.setDate, today);
+  const guidance = guidanceForDay(day);
   const counts = Object.fromEntries(STATUSES.map((x) => [x.s, eggs.filter((e) => e.status === x.s).length]));
 
   return (
     <>
       <PageTitle sub={`${incubator?.name ?? "Incubator"} · set ${formatDay(batch.setDate)}`}>{batch.name}</PageTitle>
+
+      <section aria-labelledby="batch-today" className="mb-6 rounded-lg border border-primary/30 bg-secondary p-4 text-secondary-foreground">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 id="batch-today" className="flex items-center gap-2 text-xl font-semibold"><Sun className="size-5" /> Today</h2>
+          <span className="font-semibold">{day < 0 ? "Not started" : `Day ${day}`}</span>
+        </div>
+        {batch.status === "done" ? <p>This batch is finished.</p> : (
+          <div className="space-y-3">
+            {guidance.candle && (
+              <div>
+                <p className="text-lg font-bold">Time to candle</p>
+                {day === 18 && <p className="mt-1">Complete this final check before lockdown, not after pipping starts.</p>}
+                <Link to="/guides/$slug" params={{ slug: "candling" }} className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline"><BookOpen className="size-4" /> Candling guide</Link>
+              </div>
+            )}
+            {day === 18 && <p className="text-lg font-bold">Lockdown: stop turning, raise humidity to about {guidance.humidity?.min}–{guidance.humidity?.max}%, don't open the lid</p>}
+            {guidance.phase === "hatch" && <p className="text-lg font-bold">Hatch day</p>}
+            {guidance.phase === "late" && <p className="text-lg font-bold">Late hatches: give chicks more time</p>}
+            <p>{guidance.reminder}</p>
+            {day >= 18 && <Link to="/guides/$slug" params={{ slug: "hatch-day" }} className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline"><BookOpen className="size-4" /> Hatch day guide</Link>}
+          </div>
+        )}
+      </section>
 
       <section className="card-soft mb-6 p-4">
         <div className="mb-3 flex items-baseline justify-between">

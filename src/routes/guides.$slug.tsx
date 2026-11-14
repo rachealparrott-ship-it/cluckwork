@@ -20,6 +20,7 @@ export const Route = createFileRoute("/guides/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
@@ -57,11 +58,11 @@ function GuidePage() {
         ))}
       </nav>
 
-      <div className="mb-6 flex flex-wrap gap-2 text-sm">
+      {guide.sections.some((s) => s.signs?.some((sign) => sign.reliability)) && <div className="mb-6 flex flex-wrap gap-2 text-sm">
         {(Object.keys(RELIABILITY) as Reliability[]).map((r) => (
           <span key={r} className={`rounded-full px-3 py-1 font-bold ${RELIABILITY[r].cls}`}>{RELIABILITY[r].label}</span>
         ))}
-      </div>
+      </div>}
 
       {guide.sections.map((s) => (
         <section key={s.id} id={s.id} className="mb-8 scroll-mt-4">
